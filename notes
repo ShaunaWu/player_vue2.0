@@ -1,0 +1,243 @@
+1、"package.json"中"dependencies"中加入babel-runtime，fastclick，"devDependencies"中加入babel-polyfill
+
+2、<style scoped> 限制样式只影响style标签的父元素和它所有的后代元素。
+
+推荐页面：
+
+3、slider.vue中，初始化BScroll，mounted() {setTimeout(() => {}, 20)}。因为页面刷新是17秒
+
+4、抓取歌单数据，利用axios，一定要记得安装express和axios
+
+5、热门歌单推荐：利用两个flex进行操作，左右flex，且通过align-items水平居中；右边flex，利用justify-content垂直居中
+
+6、scroll组件抽象，<slot>插槽
+
+7、利用scroll组件时，滚动的两个部分要再次封到一个<div>下面
+<div class="recommend">
+    <scroll class="recommend-content" :data="discList">
+      <div>！！！！！！！！！！！！！！！！！！！！！！！！！！
+        <div v-if="recommends.length" class="slide-wrapper">
+        <slider>
+          <div v-for="(item,index) in recommends" :key="index">
+            <a :href="item.linkUrl">
+              <img :src="item.picUrl">
+            </a>
+          </div>
+        </slider>
+      </div>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单推荐</h1>
+          <ul>
+            <li v-for="item in discList" class="item">
+              <div class="icon">
+                <img width="60" height="60" :src="item.imgurl">
+              </div>
+              <div class="text">
+               <h2 class="name" v-html="item.creator.name"></h2>
+               <p class="desc" v-html="item.dissname"></p>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>！！！！！！！！！！！！！！！！！！！！！！！！！！！！！
+    </scroll>
+  </div>
+
+8、初始化scroll时，可能轮播图的图片还没有加载完成，而且这部分的高度是被图片撑开的，只有获取到图片后才能拿到这部分的高度。所以，可以在加载一张图片后，refresh这个scroll
+
+9、vue-lazyload做图片懒加载  Vue.use  v-lazy=""
+
+10、loading组件，“正在载入...”
+
+歌手页面：
+
+11、开发一个Singer类，减少代码量
+
+12、_normalizeSinger(list) 按照热门、A-Z组织歌手数据，返回一个一维数组
+
+13、歌手头像采用图片懒加载
+
+14、点击右侧快捷列表，获取对应索引,onShortcutTouchStart()；在scroll.vue中再封装一个方法scrollTo(),scrollToElement()
+
+15、滑动右侧快捷列表,onShortcutTouchMove()
+
+16、右侧列表对应展示的部分进行高亮，分三部分计算
+
+歌手详情页面（二级vue-router)
+
+17、listView.vue派发事件给父组件singer.vue，父组件利用this.$router.push({path: `/singer/${singer.id}`})进行跳转
+
+18、vuex
+
+19、抓取歌手详情信息要传入singermid
+
+20、如果直接在详情页刷新，是拿不到歌手详细信息，可以强行让页面回退到歌手列表页面
+
+21、复用createSong(musicData)创建歌曲对象
+
+22、歌手详情页面，歌单详情页面，排行榜页面，这三个页面都有歌曲列表，复用组件song-list.vue
+
+23、es6的解析赋值：let {musicData} = item 即为 musicData = item.musicData
+
+24、歌手图片随着歌曲列表向上的滚动而推动，在<scroll>上面加一个bg-layer层
+
+25、通过控制bgImage的高度(padding-top)和z-index,控制滚动时最上面的正常显示
+
+26、利用scale控制，使得歌手图片跟随下拉进行扩大
+
+27、利用CSS的高斯模糊属性backdrop-filter
+
+28、利用浏览器的能力检测特性，在dom.js中露出一个prefixStyle(style)函数
+
+音乐播放器内核
+
+29、play.vue不是任何一个路由下的子组件，所以添加到App.vue下
+
+30、mapMutations mapGetters mapActions等使用
+
+31、normal-player和mini-player切换时CD图片的飞入  create-keyframe-animation
+
+32、增加Vkey请求
+
+33、CD图片旋转，利用animation
+
+34、如果切换太快的话，会出现问题，见34.png。利用@canplay控制，只有一首歌曲加载完成后，点击“快进”才有反应
+
+35、利用e.target.currentTime，e.target.currentTime是当前播放时间，是一个可读写的属性(audio的属性)
+
+36、得到的时间，分和秒要去补位，成为两位数字（_pad）
+
+37、类似this.$refs.progress.style.width = `${offsetWidth}px`操作时，一定要记得px！！！！
+
+38、touchstart，touchmove，touchend来实现播放进度按钮的拖动和点击
+
+39、e.touches[0].pageX记录第一个touch的横向坐标
+
+40、e.offsetX获取点击的偏移，见progress-bar.vue的53行。这里当我们点击progressBtn的时候，e.offsetX获取不对
+
+41、歌单随机播放，歌单要重新洗牌，放到common下util.js
+
+42、利用audio标签的ended事件，歌曲播放完后切换到下一首歌
+
+43、利用正则去获取歌词内容（"MusicJsonCallback({\"retcode\":0,\"code\":0,\"subcode\":0,
+\"lyric\":\"W3RpOuWRiueZveawlOeQg10KW2FyOuWRqOadsOS8pl0KW2FsOuWRqOadsOS8pueahOW6iui+uea
+VheS6i10KW2J5Ol0KW29mZnNldDowXQpbMDA6MDAuOTJd5ZGK55m95rCU55CDIC0g5ZGo5p2w5LymClswMDowMy
+43OV0KWzAwOjA0Ljc1Xeivje+8muaWueaWh+WxsQpbMDA6MDYuNDBd5puy77ya5ZGo5p2w5LymClswMDowOC45N
+V0KWzAwOjIzLjU5XeWhnue6s+ays+eVlCDlt6blsrjnmoTlkpbllaEKWzAwOjI2LjE2XeaIkeaJi+S4gOadryDl
+k4HlsJ3kvaDnmoTnvo4KWzAwOjI4Ljc4XQpbMDA6MjkuMzNd55WZ5LiL5ZSH5Y2w55qE5Zi0ClswMDozMS44M10
+KWzAwOjM0LjI3XeiKseW6l+eOq+eRsCDlkI3lrZflhpnplJnosIEKWzAwOjM2LjkwXeWRiueZveawlOeQgyDpo47
+lkLnliLDlr7nooZcKWzAwOjM5LjI5XQpbMDA6NDAuMDFd5b6u56yR5Zyo5aSp5LiK6aOeClswMDo0Mi4xMF0KWz
+AwOjQ0LjAxXeS9oOivtOS9oOacieeCuemavui/vQpbMDA6NDYuNTdd5oOz6K6p5oiR55+l6Zq+6ICM6YCAClsw
+MDo0OS4yMl3npLzniankuI3pnIDmjJHmnIDotLUKWzAwOjUxLjg5XeWPquimgemmmeamreeahOiQveWPtgpbM
+DA6NTQuNTZd5ZaUIOiQpemAoOa1qua8q+eahOe6puS8mgpbMDA6NTcuMjZd5LiN5a6z5oCV5pCe56C45LiA5Yi
+HClswMDo1OS45M13mi6XmnInkvaDlsLHmi6XmnInlhajkuJbnlYwKWzAxOjA0LjEwXQpbMDE6MDUuMDFd5Lqy
+54ix55qEIOeIseS4iuS9oApbMDE6MDguMTdd5LuO6YKj5aSp6LW3ClswMToxMC42MV0KWzAxOjExLjMzXeeUn
+OicnOeahOW+iOi9u+aYkwpbMDE6MTQuNDNdClswMToxNS42OV3kurLniLHnmoQg5Yir5Lu75oCnClswMToxOC
+44NV3kvaDnmoTnnLznnZsKWzAxOjIxLjI0XQpbMDE6MjEuOTRd5Zyo6K+05oiR5oS/5oSPClswMToyNS4yM
+10KWzAxOjQ4LjkwXeWhnue6s+ays+eVlCDlt6blsrjnmoTlkpbllaEKWzAxOjUxLjQ2XeaIkeaJi+S4gOadry
+Dlk4HlsJ3kvaDnmoTnvo4KWzAxOjU0LjQzXeeVmeS4i+WUh+WNsOeahOWYtApbMDE6NTYuNjNdClswMTo1OS4
+1Nl3oirHlupfnjqvnkbAg5ZCN5a2X5YaZ6ZSZ6LCBClswMjowMi4xNF3lkYrnmb3msJTnkIMg6aOO5ZC55Yi
+w5a+56KGXClswMjowNC4zN10KWzAyOjA1LjIzXeW+rueskeWcqOWkqeS4iumjngpbMDI6MDcuNDldClswMjow
+OS4yOV3kvaDor7TkvaDmnInngrnpmr7ov70KWzAyOjExLjkwXeaDs+iuqeaIkeefpemavuiAjOmAgApbMDI6M
+TQuNjBd56S854mp5LiN6ZyA5oyR5pyA6LS1ClswMjoxNy4yNl3lj6ropoHpppnmpq3nmoTokL3lj7YKWzAyOjE5
+LjkzXeWWlCDokKXpgKDmtarmvKvnmoTnuqbkvJoKWzAyOjIyLjY1XeS4jeWus+aAleaQnueguOS4gOWIhwpbMDI6
+MjUuMjdd5oul5pyJ5L2g5bCx5oul5pyJIOWFqOS4lueVjApbMDI6MjkuMjNdClswMjozMC4zMV3kurLniLHnmoQg
+54ix5LiK5L2gClswMjozMy41OF3ku47pgqPlpKnotbcKWzAyOjM2LjAzXQpbMDI6MzYuNjBd55Sc6Jyc55qE5b6I
+6L275piTClswMjozOS42NV0KWzAyOjQwLjk0XeS6sueIseeahCDliKvku7vmgKcKWzAyOjQ0LjIwXeS9oOeahOec
+vOedmwpbMDI6NDYuNzBdClswMjo0Ny4yNl3lnKjor7TmiJHmhL/mhI8KWzAyOjUwLjgxXQpbMDI6NTEuNzZd5Lqy5
+4ix55qEIOeIseS4iuS9oApbMDI6NTQuNTJdClswMjo1NS4wNV3mgYvniLHml6XorrAKWzAyOjU3LjMwXQpbMDI6NT
+cuOTNd6aOY6aaZ5rC055qE5Zue5b+GClswMzowMC43Ml0KWzAzOjAyLjMzXeS4gOaVtOeTtiDnmoTmoqblooMKWzA
+zOjA1LjQyXeWFqOmDveacieS9oApbMDM6MDcuOTFdClswMzowOC42NF3mkIXmi4zlnKjkuIDotbcKWzAzOjExLjM5
+XQpbMDM6MTMuMDJd5Lqy54ix55qE5Yir5Lu75oCnClswMzoxNi4yM13kvaDnmoTnnLznnZsKWzAzOjE5Ljk5XQpbMD
+M6MjEuMzFd5Zyo6K+05oiR5oS/5oSP\",\"trans\":\"\"})"）
+修改dev.conf.js后可以拿到数据，见43.png
+
+44、歌词（base64字符串）转换，利用js-base64插件
+
+45、歌词解析，利用lyric-parser插件:play(),stop(),togglePlay(),seek()
+
+46、CD页面和歌词页面切换，利用改变style方式
+
+47、歌词播放是有个计时器在内部，当歌曲切换时，要把当前歌曲歌词的计时器关掉
+
+48、单曲循环时，歌曲结束循环时，歌词不会跳到开始：利用this.currentLyric.seek(0)
+
+49、考虑获取不到歌词是，在getLyric中做catch操作
+
+50、如果列表只有一首歌曲，执行next()或者prev()操作时，let index = this.currentIndex + 1;if (index === this.playlist.length) {
+    index = 0;}，此时playlist没变，当前歌曲的id也没变，那么watch里面的操作都不会执行。解决：可以加一个判断，playlist长度为1时，
+    直接执行loop()
+
+55、如果在微信中播放，到后台，js不执行，audio可以把当前这首歌曲播放完，会去触发end()，但是end不会执行。js一旦不执行，再次打开（切到前台），
+    songReady就不会置为true，就不能进行切换。解决：watch中currentSong，不用$nextTick，用setTimeout
+
+56、有mini-player时，scroll的底部高度需要进行修改,在music-list.vue,singer.vue,recommend.vue
+
+热门歌单详情页
+
+57、获取热单详情列表时，要用到axios，要用到字符串的处理，具体见webpack.dev.conf.js中的/api/getSongList
+
+排行榜页面
+
+58、注意：在使用scroll组件时，其父元素一定要定义高度，比如rank.vue中的class="rank"的div，要设好top和bottom
+
+搜索页面
+
+59、搜索框和数据的双向绑定用v-model
+
+60、搜索页面如输入“周杰伦”，可能会出现歌曲列表和歌手两种搜索结果，要用_genResult()函数对res.dataji进行处理
+
+61、[class^="icon_"]   这个表示以icon_开头的class
+    [class*=" icon_"]   这个表示包含icon_的class
+
+62、扩展scroll组件实现上拉刷新。scroll组件提供一个pullup属性，如果这个属性设为true，就会监听scrollEnd。
+    在滑到底部的时候，就会触发scrollEnd，只触发一次。在里面去判断滚动的scroll.y和最大的滚动距离+50像素，如果认为滚动到底部，
+    就会提交一个scrollToEnd事件给suggest组件，调用searchMore()方法
+
+63、scroll滑到某个位置后，如果重新输入新的query，可能会出现没有数据的情况，因为scroll的位置不对。所以在第一次search()时，要把
+    scroll的位置重置到顶部
+
+64、向当前playlist添加一首歌曲，vuex中添加一个action，insertSong
+
+65、不能在mutation外修改state，所以在insertSong中可以先做副本，然后操作副本
+
+66、优化：
+   检索不到的时候显示“抱歉”no-result.vue；
+   每修改一次query，请求一次，浪费，利用节流debounce；
+   在手机端，滚动列表，键盘不会自动收起.对scroll进行扩展
+
+67、搜索历史的缓存，要缓存到本地，用到actions.js中的saveSearchHistory；本地缓存可以利用一个库good-storage。见cache.js
+
+68、https://coding.imooc.com/learn/questiondetail/29188.html
+
+
+
+问题：
+
+轮播图自动播放不会跳转第一页
+
+vue-lazyload源码阅读，自己写个插件
+
+scroll的click为true，和fastclick冲突？？？需要加class="needsclick"？？？https://www.cnblogs.com/vajoy/p/5522114.html
+
+(done)歌手详情页面转场动画？？？transition slide-enter。因为拼写错误，slide写成了slider
+
+export和export default有什么区别？？？
+
+song类中的url
+
+pageX,offsetX clientX等的区别
+
+progress-circle.vue中svg画圆
+
+圆圈进度条为什么要两条circle
+
+axios获取歌词？？？
+
+\common\js\song.js中getLyric()函数的Promise使用？？？
+
+???解决微信后台切前台的问题，setTimeout和nextTick到底区别在哪儿？前端早读课1124期
+
+为什么每次抓取数据都是在created()钩子里面
+
+search-box.vue中，监听query时，为什么不直接用watch？？？
