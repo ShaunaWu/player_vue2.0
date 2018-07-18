@@ -210,7 +210,9 @@ M6MjEuMzFd5Zyo6K+05oiR5oS/5oSP\",\"trans\":\"\"})"）
 
 68、https://coding.imooc.com/learn/questiondetail/29188.html
 
+69、删除搜索记录的确认弹窗confirm.vue
 
+70、在search页面中，给热门搜索和搜索历史加滚动，两个都有数据，所以用计算属性定义shortcut，来给scroll传值
 
 问题：
 
