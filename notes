@@ -214,6 +214,10 @@ M6MjEuMzFd5Zyo6K+05oiR5oS/5oSP\",\"trans\":\"\"})"）
 
 70、在search页面中，给热门搜索和搜索历史加滚动，两个都有数据，所以用计算属性定义shortcut，来给scroll传值
 
+71、播放列表，切换当前正在播放的歌曲时，可以让切换到的歌曲滑动到上面，playlist.vue中的scrollToCurrent
+
+72、playlist.vue中删除一首歌曲的动画，利用vue的transition-group
+
 问题：
 
 轮播图自动播放不会跳转第一页
