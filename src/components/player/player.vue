@@ -97,7 +97,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {mapGetters, mapMutations} from 'vuex'
+  import {mapGetters, mapMutations, mapActions} from 'vuex'
   import animations from 'create-keyframe-animation'
   import {prefixStyle} from 'common/js/dom'
   import ProgressBar from 'base/progress-bar/progress-bar'
@@ -176,6 +176,7 @@
       ready() {
         // 标志位，只有歌曲ready的时候，songReady才是true。防止了快速点击的DOM问题
         this.songReady = true
+        this.savePlayHistory(this.currentSong)
       },
       error() {
         // 网络有问题或者下首歌曲的url有问题时，songReady不能置为true，那快进和快退按钮就不能使用了。所以可以在error中将songReady置为true
@@ -361,6 +362,9 @@
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN'
       }),
+      ...mapActions([
+        'savePlayHistory'
+      ]),
       enter(el, done) {
         const {x, y, scale} = this._getPosAndScale()
 

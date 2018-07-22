@@ -6,6 +6,9 @@ import storage from 'good-storage'
 const SEARCH_KEY = '__search__'
 const SEARCH_MAX_LENGTH = 15
 
+const PLAY_KEY = '__play__'
+const PLAY_MAX_LENGTH = 200
+
 function insertArray(arr, val, compare, maxLen) {
   const index = arr.findIndex(compare)
   // 有这条数据，也在第一个位置
@@ -58,4 +61,18 @@ export function deleteSearch(query) {
 export function clearSearch() {
   storage.remove(SEARCH_KEY)
   return []
+}
+
+export function savePlay(song) {
+  let songs = storage.get(PLAY_KEY, [])
+  insertArray(songs, song, (item) => {
+    return item.id === song.id
+  }, PLAY_MAX_LENGTH)
+  storage.set(PLAY_KEY, songs)
+  return songs
+}
+
+export function loadPlay() {
+  // 只是一个属性，不是实例，用的时候需要再new一个Song的实例
+  return storage.get(PLAY_KEY, [])
 }

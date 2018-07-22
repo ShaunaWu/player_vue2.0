@@ -218,6 +218,9 @@ M6MjEuMzFd5Zyo6K+05oiR5oS/5oSP\",\"trans\":\"\"})"）
 
 72、playlist.vue中删除一首歌曲的动画，利用vue的transition-group
 
+73、因为transition-group加了动画，所以会造成scroll添加歌曲时scroll高度计算出错，所以用到transition-group的都需要将refresh的延时加长到100ms
+    包括playlist.vue,search.vue    :refreshDelay="refreshDelay"
+
 问题：
 
 轮播图自动播放不会跳转第一页
